@@ -1,0 +1,41 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: worker-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/worker-service
+    username: root
+    password: rushabh@2005
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: worker-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+      enable-auto-commit: false  # Manual commit for idempotency
+    listener:
+      ack-mode: manual  # Manual acknowledgment
+
+worker:
+  job-service-url: http://localhost:8080
+
+kafka:
+  topics:
+    job-execution: job-execution-requests

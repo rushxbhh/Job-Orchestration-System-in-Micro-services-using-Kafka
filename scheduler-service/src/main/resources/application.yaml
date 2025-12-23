@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: scheduler-service
+
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+        spring.json.trusted.packages: '*'
+
+scheduler:
+  scan-interval-ms: 10000
+  job-service:
+    url: http://localhost:8080
+
+kafka:
+  topics:
+    job-execution: job-execution-requests
